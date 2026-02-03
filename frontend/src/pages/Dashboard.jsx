@@ -78,14 +78,27 @@ const Dashboard = () => {
         <div className="min-h-screen bg-gray-50 pb-20">
             <Navbar />
 
+
             {/* Hero Section */}
-            <div className="bg-white border-b border-gray-100 pt-24 pb-12 px-4 shadow-sm">
-                <div className="max-w-6xl mx-auto text-center md:text-left">
-                    <h1 className="text-3xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                        {user ? `Bonjour, ${user.firstname || user.email.split('@')[0]} ! 👋` : 'Espace Étudiant'}
+            <div className="relative bg-white pt-32 pb-20 px-4 overflow-hidden">
+                {/* Background Decor */}
+                <div className="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-indigo-50/50 to-white -z-10"></div>
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                <div className="absolute top-20 -left-20 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-30 mix-blend-multiply filter"></div>
+
+                <div className="max-w-6xl mx-auto text-center relative z-10">
+                    <span className="inline-block py-1 px-3 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-bold tracking-wider uppercase mb-6 shadow-sm">
+                        Espace Apprentissage
+                    </span>
+                    <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight text-slate-900">
+                        {user ? (
+                            <>
+                                Bonjour, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">{user.firstname || user.email.split('@')[0]}</span>
+                            </>
+                        ) : 'Bienvenue'}
                     </h1>
-                    <p className="text-lg text-gray-500 max-w-2xl">
-                        Retrouvez ici tous les modules de formation, documents et vidéos partagés par vos professeurs.
+                    <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-light">
+                        Retrouvez ici tous les modules de formation, documents et vidéos partagés par vos professeurs pour exceller dans votre parcours.
                     </p>
                 </div>
             </div>

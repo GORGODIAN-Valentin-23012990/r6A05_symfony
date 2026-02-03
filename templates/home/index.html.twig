@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EduLearn - Plateforme d'Apprentissage{% endblock %}
+
+{% block body %}
+    <!-- Gateway Section -->
+    <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">Bienvenue sur EduLearn</h1>
+                <p class="lead text-muted">Sélectionnez votre espace pour continuer</p>
+            </div>
+
+            <div class="row justify-content-center g-4">
+                <!-- Espace Étudiant -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="card border-0 shadow-lg h-100 hover-transform transition-all">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4 text-info">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-backpack-fill" viewBox="0 0 16 16">
+                                    <path d="M5 13v-3a4 4 0 0 1 8 0v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    <path d="M6 2v2h4V2a1 1 0 0 1 1-1h-6a1 1 0 0 1 1 1z"/>
+                                    <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.1.008.201.013.303.013a6 6 0 0 1 10.435 3.669c.376.02.772.043 1.189.068.513.03 1.045.064 1.573.1.284.097.55.22.793.366V4.5A1.5 1.5 0 0 0 13.5 3h-11z"/>
+                                    <path d="M14 6.918c-.468-.032-.962-.062-1.465-.089A4.992 4.992 0 0 0 8 5c-1.93 0-3.61.996-4.526 2.504L2 6.78V13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6.918z"/>
+                                </svg>
+                            </div>
+                            <h2 class="h3 fw-bold mb-3">Espace Étudiant</h2>
+                            <p class="text-muted mb-4">Accédez à votre tableau de bord, vos cours et vos résultats.</p>
+                            <a href="/student/login" class="btn btn-info btn-lg w-100 text-white rounded-pill fw-bold">
+                                Je suis Étudiant
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Espace Professeur -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="card border-0 shadow-lg h-100 hover-transform transition-all">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4 text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+                                    <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                                    <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.373 5.373 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2H2Z"/>
+                                </svg>
+                            </div>
+                            <h2 class="h3 fw-bold mb-3">Espace Professeur</h2>
+                            <p class="text-muted mb-4">Gérez vos classes, créez des cours et suivez les progrès.</p>
+                            <a href="{{ path('app_login') }}" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold">
+                                Je suis Professeur
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .hover-transform {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-transform:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+        }
+    </style>
+{% endblock %}

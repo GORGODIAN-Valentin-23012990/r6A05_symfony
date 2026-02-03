@@ -1,0 +1,289 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    color: #1f2937;
+    margin: 0;
+}
+
+/* Modern Glassmorphism Navbar */
+.modern-navbar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: -0.025em;
+    color: var(--primary-color) !important;
+}
+
+.navbar-brand svg {
+    color: var(--primary-color);
+}
+
+/* Custom Button Styling */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+}
+
+.btn-outline-danger {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* Card Improvements */
+.card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+    min-height: 500px;
+    padding: 100px 0;
+    margin-top: -1px;
+    /* Fix any sub-pixel gap with navbar */
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section h1 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjust navbar to sit nicely on top if transparency is used, 
+   but currently it is fixed/sticky so it overlays. 
+   Just ensuring hero starts right under it. */
+.modern-navbar {
+    /* If we want the navbar to be transparent over the hero, 
+       we would need to position it absolute. 
+       For now, it's sticky top and has its own glass bg. */
+}
+
+/* Video Carousel */
+.video-carousel-container {
+    width: 100%;
+    position: relative;
+    /* Optional: fade effect on sides if desired later */
+}
+
+.video-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+
+    /* Styled Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.video-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.video-carousel::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.video-carousel::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+
+.video-carousel::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Navigation Buttons */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    color: #1f2937;
+}
+
+.carousel-btn:hover {
+    background: #f8fafc;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-50%) scale(1.1);
+    color: #4f46e5;
+}
+
+.btn-prev {
+    left: -24px;
+}
+
+.btn-next {
+    right: -24px;
+}
+
+/* Modern Video Card Design */
+.video-card {
+    flex: 0 0 320px;
+    height: 480px;
+    /* Fixed height for uniformity */
+    scroll-snap-align: start;
+    border: none;
+    border-radius: 24px;
+    /* More rounded */
+    background: #ffffff;
+    /* Soft, multi-layered shadow for depth */
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.05),
+        0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.video-card .card-img-top {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    /* Let overflow handle it */
+    position: relative;
+    transition: transform 0.6s ease;
+}
+
+/* Zoom effect on image on hover */
+.video-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.video-card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    z-index: 2;
+    /* Ensure text is above any potential background effects */
+    background: white;
+    /* Ensure non-transparent body */
+}
+
+.video-card .card-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.video-card .card-text {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.5;
+
+    /* Truncation logic */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.video-card .badge {
+    font-weight: 600;
+    padding: 0.5em 0.8em;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+}
+
+/* Ergonomic Button Area */
+.video-card .mt-auto {
+    margin-top: auto;
+    display: flex;
+    gap: 0.75rem;
+    flex-direction: column;
+}
+
+.video-card .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.video-card .btn-primary {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+    border: none;
+}
+
+.video-card .btn-primary:hover {
+    box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.5);
+    transform: translateY(-1px);
+}
+
+.video-card .btn-outline-primary {
+    border: 2px solid #e0e7ff;
+    color: #4f46e5;
+    background: transparent;
+}
+
+.video-card .btn-outline-primary:hover {
+    border-color: #4f46e5;
+    background: #eef2ff;
+    color: #4338ca;
+}

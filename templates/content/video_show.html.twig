@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ video.title }} - EduLearn{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary mb-4 rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Retour au tableau de bord
+    </a>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 overflow-hidden rounded-4">
+                <div class="ratio ratio-16x9 bg-dark">
+                    <video src="{{ asset('uploads/videos/' ~ video.filename) }}" controls autoplay></video>
+                </div>
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h1 class="fw-bold mb-2">{{ video.title }}</h1>
+                            <p class="text-muted mb-0">Ajouté le {{ video.createdAt|date('d/m/Y') }}</p>
+                        </div>
+                        <button class="btn btn-primary rounded-pill px-4 py-2">
+                            ✨ Générer un QCM avec l'IA
+                        </button>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3">Description</h5>
+                    <p class="text-muted lead">{{ video.description|nl2br }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

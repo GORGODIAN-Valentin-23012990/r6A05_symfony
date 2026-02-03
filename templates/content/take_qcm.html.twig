@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QCM : {{ document.title }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary rounded-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                    Quitter
+                </a>
+                <div class="text-end">
+                    <h5 class="fw-bold m-0 text-primary">{{ document.title }}</h5>
+                    <small class="text-muted">Question <span id="currentQuestionNum">1</span> sur <span id="totalQuestionsNum">5</span></small>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress mb-5" style="height: 10px;">
+                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 0%" id="progressBar"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div id="quizContainer">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden" id="questionCard">
+                    <div class="card-body p-5">
+                        <h3 class="fw-bold mb-4" id="questionText">Chargement...</h3>
+                        
+                        <div class="list-group list-group-flush gap-2" id="optionsContainer">
+                            <!-- Options injected by JS -->
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light p-4 border-top-0 d-flex justify-content-end">
+                        <button class="btn btn-primary btn-lg rounded-pill px-5" id="nextButton" disabled>
+                            Valider la réponse
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Card (Hidden by default) -->
+            <div id="resultContainer" class="d-none text-center fade-in">
+                <div class="card shadow-lg border-0 rounded-4 p-5">
+                    <div class="mb-4">
+                        <span style="font-size: 4rem;">🎉</span>
+                    </div>
+                    <h2 class="fw-bold mb-3">QCM Terminé !</h2>
+                    <p class="text-muted lead mb-5">Voici ton résultat pour ce document.</p>
+                    
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-md-6">
+                            <div class="bg-light rounded-4 p-4">
+                                <div class="display-4 fw-bold text-primary mb-2" id="scoreDisplay">--/20</div>
+                                <div class="text-muted" id="scoreDetail">-- bonnes réponses sur --</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                         <a href="{{ path('app_document_show', {'id': document.id}) }}" class="btn btn-outline-primary rounded-pill px-4 py-2">
+                             Revoir le document
+                        </a>
+                        <a href="{{ path('app_document_take_qcm', {'id': document.id}) }}" class="btn btn-primary rounded-pill px-4 py-2">
+                            🔄 Recommencer
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Data
+    // Use json_encode raw to handle quotes/arrays correctly
+    const quizData = {{ quiz|json_encode|raw }};
+    const totalQuestions = quizData.length;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let userAnswers = []; // Store selected indices for current question
+
+    // Elements
+    const quizContainer = document.getElementById('quizContainer');
+    const resultContainer = document.getElementById('resultContainer');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const nextButton = document.getElementById('nextButton');
+    const currentNumEl = document.getElementById('currentQuestionNum');
+    const totalNumEl = document.getElementById('totalQuestionsNum');
+    const progressBar = document.getElementById('progressBar');
+    
+    // Init View
+    totalQuestionsNum.textContent = totalQuestions;
+    loadQuestion(currentQuestionIndex);
+
+    function loadQuestion(index) {
+        const q = quizData[index];
+        questionText.textContent = q.question;
+        currentNumEl.textContent = index + 1;
+        progressBar.style.width = ((index) / totalQuestions * 100) + '%';
+        
+        // Check if multiple correct answers expected
+        // Mistral format: answer can be string or array
+        const isMultiple = Array.isArray(q.answer);
+
+        optionsContainer.innerHTML = '';
+        nextButton.disabled = true;
+        nextButton.textContent = (index === totalQuestions - 1) ? 'Terminer' : 'Suivant';
+        userAnswers = [];
+
+        q.options.forEach((opt, i) => {
+            const label = document.createElement('label');
+            label.className = 'list-group-item border-0 rounded-3 mb-2 d-flex align-items-center p-3 list-group-item-action cursor-pointer bg-light';
+            label.style.cursor = 'pointer';
+            
+            const inputType = isMultiple ? 'checkbox' : 'radio';
+            
+            const input = document.createElement('input');
+            input.type = inputType;
+            input.name = 'qcm_option';
+            input.value = opt; // We store the text value to compare
+            input.className = 'form-check-input me-3 border-secondary';
+            input.style.width = '1.3em';
+            input.style.height = '1.3em';
+
+            input.addEventListener('change', () => handleSelection(inputType));
+
+            const text = document.createElement('span');
+            text.textContent = opt;
+            text.className = 'fs-5';
+
+            label.appendChild(input);
+            label.appendChild(text);
+            optionsContainer.appendChild(label);
+        });
+    }
+
+    function handleSelection(type) {
+        const inputs = document.querySelectorAll('input[name="qcm_option"]:checked');
+        
+        // Update styling
+        document.querySelectorAll('.list-group-item').forEach(el => {
+            if (el.querySelector('input').checked) {
+                el.classList.remove('bg-light');
+                el.classList.add('bg-primary-subtle', 'border-primary', 'text-primary-emphasis');
+            } else {
+                el.classList.add('bg-light');
+                el.classList.remove('bg-primary-subtle', 'border-primary', 'text-primary-emphasis');
+            }
+        });
+
+        nextButton.disabled = inputs.length === 0;
+    }
+
+    nextButton.addEventListener('click', () => {
+        // Calculate Score for this question
+        const q = quizData[currentQuestionIndex];
+        const selectedInputs = Array.from(document.querySelectorAll('input[name="qcm_option"]:checked'));
+        const selectedValues = selectedInputs.map(input => input.value);
+        
+        let isCorrect = false;
+
+        if (Array.isArray(q.answer)) {
+            // Multiple answers: Arrays must match exactly (ignoring order if we want, but let's assume loose sort)
+            // But Mistral usually gives ["A", "B"] or text.
+            // Comparison: Sort both and compare stringified
+            // CAUTION: Text comparison might be tricky if special chars differ.
+            // Assumption: Options provided by AI match Answer provided by AI exactly.
+            
+            const correctAnswers = q.answer.sort();
+            const userSelected = selectedValues.sort();
+            
+            if (JSON.stringify(correctAnswers) === JSON.stringify(userSelected)) {
+                isCorrect = true;
+            }
+        } else {
+            // Single answer
+            if (selectedValues.length === 1 && selectedValues[0] === q.answer) {
+                isCorrect = true;
+            }
+        }
+
+        if (isCorrect) score++;
+
+        // Next or Finish
+        if (currentQuestionIndex < totalQuestions - 1) {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        } else {
+            showResults();
+        }
+    });
+
+    function showResults() {
+        quizContainer.classList.add('d-none');
+        resultContainer.classList.remove('d-none');
+        progressBar.style.width = '100%';
+        progressBar.classList.add('bg-success');
+
+        const mark = Math.round((score / totalQuestions) * 20);
+        document.getElementById('scoreDisplay').textContent = mark + '/20';
+        document.getElementById('scoreDetail').textContent = score + ' bonnes réponses sur ' + totalQuestions;
+        
+        // Color code
+        const display = document.getElementById('scoreDisplay');
+        if (mark >= 16) display.classList.replace('text-primary', 'text-success');
+        else if (mark < 10) display.classList.replace('text-primary', 'text-danger');
+        else if (mark < 14) display.classList.replace('text-primary', 'text-warning');
+    }
+</script>
+{% endblock %}

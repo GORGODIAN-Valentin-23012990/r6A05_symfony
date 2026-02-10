@@ -28,14 +28,16 @@ class MistralAiService
         $prompt = <<<EOT
         Tu es un professeur expert. Génère un QCM de $nbQuestions questions basé sur le texte suivant.
         $multipleInstruction
-        Le format de sortie DOIT être un JSON valide respectant cette structure :
-        [
-            {
-                "question": "La question ?",
-                "options": ["Choix A", "Choix B", "Choix C", "Choix D"],
-                "answer": "La bonne réponse exacte (doit être l'une des options)"
-            }
-        ]
+        Le format de sortie DOIT être un objet JSON valide contenant une clé "questions" :
+        {
+            "questions": [
+                {
+                    "question": "La question ?",
+                    "options": ["Choix A", "Choix B", "Choix C", "Choix D"],
+                    "answer": "La bonne réponse exacte (doit être l'une des options)"
+                }
+            ]
+        }
         
         Texte :
         $content
@@ -62,7 +64,14 @@ class MistralAiService
         // Clean up markdown code blocks if present (Mistral sometimes adds ```json ... ```)
         $content = str_replace(['```json', '```'], '', $content);
 
-        return json_decode($content, true) ?? [];
+        $result = json_decode($content, true) ?? [];
+
+        // Normalize output: ensure we return a flat array of questions
+        if (isset($result['questions']) && is_array($result['questions'])) {
+            return $result['questions'];
+        }
+
+        return $result;
     }
     public function transcribeVideo(string $videoPath): string
     {

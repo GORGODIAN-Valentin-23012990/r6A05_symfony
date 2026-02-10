@@ -35,5 +35,81 @@
         {% endif %}
 
         {% block body %}{% endblock %}
+
+        <!-- Modern Full-screen Loader -->
+        <div id="ai-loader" class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="z-index: 9999; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+            <div class="position-relative mb-4">
+                <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <span class="fs-4">✨</span>
+                </div>
+            </div>
+            <h3 class="fw-bold text-primary mb-2" id="loader-title">Analyse en cours...</h3>
+            <p class="text-muted" id="loader-subtitle">L'IA étudie le contenu pour générer le QCM.</p>
+            
+            <div class="progress w-25 mt-3 rounded-pill" style="height: 6px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" id="loader-progress" role="progressbar" style="width: 100%"></div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const loader = document.getElementById('ai-loader');
+                const title = document.getElementById('loader-title');
+                const sub = document.getElementById('loader-subtitle');
+                
+                // Messages to cycle through
+                const messages = [
+                    { t: "Extracting audio...", s: "Extraction de la piste sonore de la vidéo." },
+                    { t: "Transcribing...", s: "Conversion de l'audio en texte avec Mistral AI." },
+                    { t: "Analyzing...", s: "Compréhension des concepts clés et du contexte." },
+                    { t: "Generating Questions...", s: "Création des questions pertinentes et des distracteurs." },
+                    { t: "Finalizing...", s: "Mise en forme du QCM final." }
+                ];
+
+                window.showAiLoader = function() {
+                    loader.classList.remove('d-none');
+                    let step = 0;
+                    
+                    // Show first message immediately
+                    if (messages.length > 0) {
+                        title.textContent = messages[0].t;
+                        sub.textContent = messages[0].s;
+                    }
+
+                    // Cycle messages every 4 seconds, stopping at the last one
+                    const interval = setInterval(() => {
+                        step++;
+                        if (step >= messages.length) {
+                            clearInterval(interval);
+                            return;
+                        }
+                        const msg = messages[step];
+                        title.textContent = msg.t;
+                        sub.textContent = msg.s;
+                    }, 4000);
+                };
+
+                // Attach to forms with 'data-ai-loader'
+                document.querySelectorAll('form').forEach(form => {
+                    form.addEventListener('submit', function() {
+                        if (this.action.includes('generate-qcm')) {
+                            // Try to hide modal if bootstrap is available, otherwise just rely on z-index
+                            const modalEl = this.closest('.modal');
+                            if (modalEl && window.bootstrap) {
+                                const modal = bootstrap.Modal.getInstance(modalEl);
+                                if (modal) modal.hide();
+                            } else if (modalEl) {
+                                // Fallback: manually hide modal backdrop and modal if bootstrap isn't global
+                                // But simpler is just to let the loader cover it (z-index 9999)
+                            }
+                            window.showAiLoader();
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

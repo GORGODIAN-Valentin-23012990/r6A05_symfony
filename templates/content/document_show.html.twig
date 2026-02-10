@@ -86,39 +86,49 @@
                             <h3 class="fw-bold m-0">QCM Généré</h3>
                         </div>
 
-                        {% for q in document.qcm.content %}
-                            <div class="card shadow-sm border-0 rounded-4 mb-4 bg-light">
-                                <div class="card-body p-4">
-                                    <h5 class="card-title fw-bold mb-3">{{ loop.index }}. {{ q.question }}</h5>
-                                    <ul class="list-group list-group-flush rounded-3 mb-3">
-                                        {% for option in q.options %}
-                                            <li class="list-group-item bg-white border-0 mb-1 rounded-3">
-                                                {{ option }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                    <div class="accordion" id="accordionAnswer{{ loop.index }}">
-                                        <div class="accordion-item border-0 bg-transparent">
-                                            <h2 class="accordion-header" id="heading{{ loop.index }}">
-                                                <button class="accordion-button collapsed rounded-pill bg-white text-success shadow-none fw-bold px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}">
-                                                    👀 Voir la réponse
-                                                </button>
-                                            </h2>
-                                            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionAnswer{{ loop.index }}">
-                                                <div class="accordion-body text-success pt-2">
-                                                    <strong>Réponse(s) correcte(s) :</strong> 
-                                                    {% if q.answer is iterable %}
-                                                        {{ q.answer|join(', ') }}
-                                                    {% else %}
-                                                        {{ q.answer }}
-                                                    {% endif %}
+                        {% if document.qcm.content is iterable and document.qcm.content|length > 0 and document.qcm.content[0].question is defined %}
+                            {% for q in document.qcm.content %}
+                                <div class="card shadow-sm border-0 rounded-4 mb-4 bg-light">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title fw-bold mb-3">{{ loop.index }}. {{ q.question }}</h5>
+                                        <ul class="list-group list-group-flush rounded-3 mb-3">
+                                            {% for option in q.options %}
+                                                <li class="list-group-item bg-white border-0 mb-1 rounded-3">
+                                                    {{ option }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="accordion" id="accordionAnswer{{ loop.index }}">
+                                            <div class="accordion-item border-0 bg-transparent">
+                                                <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                                    <button class="accordion-button collapsed rounded-pill bg-white text-success shadow-none fw-bold px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}">
+                                                        👀 Voir la réponse
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionAnswer{{ loop.index }}">
+                                                    <div class="accordion-body text-success pt-2">
+                                                        <strong>Réponse(s) correcte(s) :</strong> 
+                                                        {% if q.answer is iterable %}
+                                                            {{ q.answer|join(', ') }}
+                                                        {% else %}
+                                                            {{ q.answer }}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-warning d-flex align-items-center rounded-4 p-4">
+                                <span class="fs-2 me-3">⚠️</span>
+                                <div>
+                                    <h4 class="fw-bold mb-1">QCM Incomplet ou Incorrect</h4>
+                                    <p class="mb-0">Les données du QCM semblent corrompues. Cliquez sur le bouton <strong class="text-primary">Régénérer le QCM</strong> ci-dessus pour le réparer.</p>
+                                </div>
                             </div>
-                        {% endfor %}
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

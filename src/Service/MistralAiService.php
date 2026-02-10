@@ -64,4 +64,44 @@ class MistralAiService
 
         return json_decode($content, true) ?? [];
     }
+    public function transcribeVideo(string $videoPath): string
+    {
+        // 1. Extract audio using ffmpeg
+        $audioPath = sys_get_temp_dir() . '/' . uniqid('audio_', true) . '.mp3';
+        // -q:a 0 for best quality, -vn for no video, -map a for audio stream
+        $cmd = sprintf('ffmpeg -i %s -vn -map a -q:a 2 -y %s 2>&1', escapeshellarg($videoPath), escapeshellarg($audioPath));
+
+        exec($cmd, $output, $returnCode);
+
+        if ($returnCode !== 0) {
+            // Cleanup on failure
+            if (file_exists($audioPath))
+                unlink($audioPath);
+            throw new \RuntimeException('FFmpeg audio extraction failed: ' . implode("\n", $output));
+        }
+
+        try {
+            // 2. Transcribe using Mistral API
+            $formData = new \Symfony\Component\Mime\Part\Multipart\FormDataPart([
+                'model' => 'voxtral-mini-latest',
+                'file' => \Symfony\Component\Mime\Part\DataPart::fromPath($audioPath),
+            ]);
+
+            $headers = $formData->getPreparedHeaders()->toArray();
+            $headers['Authorization'] = 'Bearer ' . $this->apiKey;
+
+            $response = $this->client->request('POST', 'https://api.mistral.ai/v1/audio/transcriptions', [
+                'headers' => $headers,
+                'body' => $formData->bodyToIterable(),
+                'timeout' => 600, // 10 minutes timeout for the API call
+            ]);
+
+            $content = $response->toArray();
+            return $content['text'] ?? '';
+        } finally {
+            if (file_exists($audioPath)) {
+                @unlink($audioPath);
+            }
+        }
+    }
 }

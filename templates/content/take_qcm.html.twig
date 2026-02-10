@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}QCM : {{ document.title }}{% endblock %}
+{% block title %}QCM : {{ item.title }}{% endblock %}
 
 {% block body %}
 <div class="container py-5">
@@ -15,7 +15,7 @@
                     Quitter
                 </a>
                 <div class="text-end">
-                    <h5 class="fw-bold m-0 text-primary">{{ document.title }}</h5>
+                    <h5 class="fw-bold m-0 text-primary">{{ item.title }}</h5>
                     <small class="text-muted">Question <span id="currentQuestionNum">1</span> sur <span id="totalQuestionsNum">5</span></small>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                         <span style="font-size: 4rem;">🎉</span>
                     </div>
                     <h2 class="fw-bold mb-3">QCM Terminé !</h2>
-                    <p class="text-muted lead mb-5">Voici ton résultat pour ce document.</p>
+                    <p class="text-muted lead mb-5">Voici ton résultat.</p>
                     
                     <div class="row justify-content-center mb-5">
                         <div class="col-md-6">
@@ -62,10 +62,10 @@
                     </div>
 
                     <div class="d-flex justify-content-center gap-3">
-                         <a href="{{ path('app_document_show', {'id': document.id}) }}" class="btn btn-outline-primary rounded-pill px-4 py-2">
-                             Revoir le document
+                         <a href="{{ backUrl }}" class="btn btn-outline-primary rounded-pill px-4 py-2">
+                             Retour
                         </a>
-                        <a href="{{ path('app_document_take_qcm', {'id': document.id}) }}" class="btn btn-primary rounded-pill px-4 py-2">
+                        <a href="{{ retryUrl }}" class="btn btn-primary rounded-pill px-4 py-2">
                             🔄 Recommencer
                         </a>
                     </div>

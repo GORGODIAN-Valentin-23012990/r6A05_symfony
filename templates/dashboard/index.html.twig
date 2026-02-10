@@ -51,8 +51,12 @@
                                 </a>
                                 <div class="card-footer bg-white border-top-0 pt-0">
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-outline-primary btn-sm rounded-pill">✨ Générer QCM</button>
-                                        <button class="btn btn-primary btn-sm rounded-pill">📝 Passer QCM</button>
+                                        <a href="{{ path('app_video_show', {'id': video.id, 'action': 'generate'}) }}" class="btn btn-outline-primary btn-sm rounded-pill">✨ Générer QCM</a>
+                                        {% if video.qcm %}
+                                            <a href="{{ path('app_video_take_qcm', {'id': video.id}) }}" class="btn btn-primary btn-sm rounded-pill">📝 Passer QCM</a>
+                                        {% else %}
+                                            <button class="btn btn-secondary btn-sm rounded-pill" disabled>📝 Passer QCM</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

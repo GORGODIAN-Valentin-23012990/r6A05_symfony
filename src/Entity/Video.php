@@ -110,4 +110,24 @@ class Video
 
         return $this;
     }
+
+    #[ORM\OneToOne(mappedBy: 'video', cascade: ['persist', 'remove'])]
+    private ?Qcm $qcm = null;
+
+    public function getQcm(): ?Qcm
+    {
+        return $this->qcm;
+    }
+
+    public function setQcm(?Qcm $qcm): static
+    {
+        // set the owning side of the relation if necessary
+        if ($qcm !== null && $qcm->getVideo() !== $this) {
+            $qcm->setVideo($this);
+        }
+
+        $this->qcm = $qcm;
+
+        return $this;
+    }
 }

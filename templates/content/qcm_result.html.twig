@@ -1,15 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}QCM Généré - {{ document.title }}{% endblock %}
+{% block title %}QCM Généré - {{ document ? document.title : video.title }}{% endblock %}
 
 {% block body %}
 <div class="container py-5">
-    <a href="{{ path('app_document_show', {'id': document.id}) }}" class="btn btn-outline-secondary mb-4 rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-        </svg>
-        Retour au document
-    </a>
+    {% if document %}
+        <a href="{{ path('app_document_show', {'id': document.id}) }}" class="btn btn-outline-secondary mb-4 rounded-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            Retour au document
+        </a>
+    {% elseif video %}
+        <a href="{{ path('app_video_show', {'id': video.id}) }}" class="btn btn-outline-secondary mb-4 rounded-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            Retour à la vidéo
+        </a>
+    {% endif %}
 
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -19,7 +28,7 @@
             </div>
             
             <p class="lead text-muted mb-5">
-                Voici 5 questions basées sur le document <strong>{{ document.title }}</strong>.
+                Voici {{ quiz|length }} questions basées sur {{ document ? 'le document' : 'la vidéo' }} <strong>{{ document ? document.title : video.title }}</strong>.
             </p>
 
             {% for q in quiz %}
@@ -57,14 +66,20 @@
                 </div>
             {% else %}
                <div class="alert alert-warning">
-                   Aucune question n'a pu être générée. Vérifiez que le document contient du texte lisible.
+                   Aucune question n'a pu être générée. Vérifiez que le contenu est lisible.
                </div>
             {% endfor %}
             
             <div class="d-grid mt-5">
-                 <a href="{{ path('app_document_generate_qcm', {'id': document.id}) }}" class="btn btn-primary btn-lg rounded-pill">
+                {% if document %}
+                 <a href="{{ path('app_document_generate_qcm', {'id': document.id, 'force': 1}) }}" class="btn btn-primary btn-lg rounded-pill">
                     🔄 Régénérer un nouveau QCM
                 </a>
+                {% elseif video %}
+                 <a href="{{ path('app_video_generate_qcm', {'id': video.id, 'force': 1}) }}" class="btn btn-primary btn-lg rounded-pill">
+                    🔄 Régénérer un nouveau QCM
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>

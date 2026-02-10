@@ -33,9 +33,14 @@ class Qcm
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'qcm', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['qcm:item'])]
     private ?Document $document = null;
+
+    #[ORM\OneToOne(inversedBy: 'qcm', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['qcm:item'])]
+    private ?Video $video = null;
 
     public function getId(): ?int
     {
@@ -71,9 +76,21 @@ class Qcm
         return $this->document;
     }
 
-    public function setDocument(Document $document): static
+    public function setDocument(?Document $document): static
     {
         $this->document = $document;
+
+        return $this;
+    }
+
+    public function getVideo(): ?Video
+    {
+        return $this->video;
+    }
+
+    public function setVideo(?Video $video): static
+    {
+        $this->video = $video;
 
         return $this;
     }

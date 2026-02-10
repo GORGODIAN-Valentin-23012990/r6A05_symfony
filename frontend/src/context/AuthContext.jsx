@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
         // Hydrate from localStorage
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
             setUser(JSON.parse(storedUser));
             setIsAuthenticated(true);
         }
+        setAuthLoading(false);
     }, []);
 
     const login = (userData) => {
@@ -29,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, authLoading }}>
             {children}
         </AuthContext.Provider>
     );

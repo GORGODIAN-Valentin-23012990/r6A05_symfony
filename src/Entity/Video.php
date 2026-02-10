@@ -112,6 +112,7 @@ class Video
     }
 
     #[ORM\OneToOne(mappedBy: 'video', cascade: ['persist', 'remove'])]
+    #[Groups(['read:collection'])]
     private ?Qcm $qcm = null;
 
     public function getQcm(): ?Qcm

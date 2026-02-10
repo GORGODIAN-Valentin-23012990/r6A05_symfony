@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const { isAuthenticated, logout, user } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     // Handle scroll effect
     useEffect(() => {
@@ -50,7 +56,7 @@ const Navbar = () => {
                                 {user?.email}
                             </span>
                             <button
-                                onClick={logout}
+                                onClick={handleLogout}
                                 className="group relative px-6 py-2.5 rounded-full bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 text-sm font-bold transition-all duration-300 border border-transparent hover:border-red-100 active:scale-95"
                             >
                                 <span className="relative z-10 flex items-center gap-2">

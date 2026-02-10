@@ -42,7 +42,7 @@ class QcmResult
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['qcm_result:read', 'qcm_result:write'])]
+    #[Groups(['qcm_result:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne]

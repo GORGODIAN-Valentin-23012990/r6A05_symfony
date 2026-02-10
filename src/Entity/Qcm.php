@@ -21,7 +21,7 @@ class Qcm
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['qcm:read', 'read:collection'])]
+    #[Groups(['qcm:read', 'read:collection', 'qcm_result:read'])]
     private ?int $id = null;
 
     #[ORM\Column]

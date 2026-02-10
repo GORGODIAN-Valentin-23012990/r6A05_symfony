@@ -13,11 +13,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        api:
-            pattern: ^/api
-            stateless: false
+        # Merged API and Main firewall to allow session sharing for React App
+        main:
+            lazy: true
             context: app_context
             provider: app_user_provider
+            custom_authenticator: App\Security\AppAuthenticator
+            
+            # Allow JSON login for API clients (if needed) on the same firewall
             json_login:
                 check_path: /api/login
                 username_path: email
@@ -25,11 +28,6 @@ security:
                 success_handler: App\Security\AuthenticationSuccessHandler
                 failure_handler: null
 
-        main:
-            lazy: true
-            context: app_context
-            provider: app_user_provider
-            custom_authenticator: App\Security\AppAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout

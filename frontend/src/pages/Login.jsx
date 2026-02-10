@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import Navbar from '../components/Navbar';
 
 const Login = () => {
     const { login } = useAuth();
@@ -22,11 +23,8 @@ const Login = () => {
         setLoading(true);
         setError(null);
         try {
-            // POST /api/login (json_login)
             const response = await api.post('/login', formData);
-            // Login context
             login(response.data);
-            // On success, redirect to dashboard
             navigate('/');
         } catch (err) {
             console.error("Login error", err);
@@ -37,80 +35,98 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-900">
-            {/* Background Effects */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-                <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
-            </div>
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Navbar />
 
-            {/* Glass Card */}
-            <div className="relative z-10 w-full max-w-md p-8 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl mx-4">
-                <div className="text-center mb-8">
-                    <div className="inline-flex p-3 bg-indigo-500/20 rounded-xl mb-4">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
+            <div className="flex-grow flex items-center justify-center relative overflow-hidden px-4 py-12">
+                {/* Background Decor */}
+                <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-indigo-200 rounded-full blur-3xl opacity-30 mix-blend-multiply filter animate-blob"></div>
+
+                <div className="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                    <div className="p-8 md:p-10">
+                        <div className="text-center mb-8">
+                            <div className="inline-flex justify-center items-center w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-6 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                </svg>
+                            </div>
+                            <h1 className="text-3xl font-black text-slate-900 mb-2">Bon retour !</h1>
+                            <p className="text-slate-500">Connectez-vous à votre espace étudiant</p>
+                        </div>
+
+                        {error && (
+                            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                                <p className="text-sm text-red-600 font-medium">{error}</p>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-400 font-medium"
+                                    placeholder="etudiant@ecole.fr"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">Mot de passe</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-400 font-medium"
+                                    placeholder="••••••••"
+                                    required
+                                />
+                                <div className="flex justify-end mt-2">
+                                    <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                        Mot de passe oublié ?
+                                    </a>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-[1.02] transform transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                            >
+                                {loading ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Connexion...
+                                    </span>
+                                ) : 'Se connecter'}
+                            </button>
+                        </form>
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-2">Espace Élève</h2>
-                    <p className="text-gray-300">Connectez-vous pour accéder à vos cours</p>
-                </div>
 
-                {error && (
-                    <div className="p-3 mb-4 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg">
-                        {error}
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-gray-400 transition-all outline-none"
-                            placeholder="etudiant@ecole.fr"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-gray-400 transition-all outline-none"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-lg shadow-lg transform transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Connexion en cours...' : 'Se connecter'}
-                    </button>
-
-                    <div className="text-center mt-4 space-y-2">
-                        <p className="text-sm text-gray-400">
+                    <div className="bg-gray-50 p-6 text-center border-t border-gray-100">
+                        <p className="text-slate-500 text-sm">
                             Pas encore de compte ? {' '}
-                            <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+                            <Link to="/register" className="font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
                                 Créer un compte
                             </Link>
                         </p>
-                        <Link to="/" className="text-sm text-gray-400 hover:text-white transition-colors block">
-                            Retour à l'accueil
-                        </Link>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );
 };
 
 export default Login;
+

@@ -74,6 +74,38 @@ const Dashboard = () => {
         return 'text-rose-500 bg-rose-50 border-rose-200';
     };
 
+    const { authLoading } = useAuth();
+
+    if (authLoading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="min-h-screen bg-gray-50 pb-20">
+                <Navbar />
+                <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 text-center">
+                    <div className="w-24 h-24 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Accès Réservé</h1>
+                    <p className="text-xl text-slate-500 max-w-lg mb-8">
+                        Vous devez être connecté pour accéder aux contenus pédagogiques et aux QCM.
+                    </p>
+                    <a href="/student/login" className="px-8 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold shadow-lg shadow-indigo-500/30 hover:scale-105 transition-transform">
+                        Se connecter
+                    </a>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
             <Navbar />

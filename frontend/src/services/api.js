@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api', // Point to Symfony API
+    baseURL: '/api', // Use relative path to avoid CORS/Cookie domain issues
     withCredentials: true, // Important for session cookies
     headers: {
         'Content-Type': 'application/ld+json',

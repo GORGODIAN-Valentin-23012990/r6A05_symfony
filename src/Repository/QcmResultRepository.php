@@ -20,8 +20,9 @@ class QcmResultRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('qr')
             ->join('qr.qcm', 'q')
-            ->join('q.document', 'd')
-            ->where('d.user = :professor')
+            ->leftJoin('q.document', 'd')
+            ->leftJoin('q.video', 'v')
+            ->where('d.user = :professor OR v.user = :professor')
             ->setParameter('professor', $professor)
             ->orderBy('qr.createdAt', 'DESC')
             ->getQuery()

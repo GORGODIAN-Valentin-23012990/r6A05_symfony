@@ -231,7 +231,15 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="fw-semibold">{{ result.qcm.document.title }}</td>
+                                        <td class="fw-semibold">
+                                            {% if result.qcm.document %}
+                                                {{ result.qcm.document.title }} <span class="badge bg-secondary ms-2" style="font-size: 0.6em;">DOC</span>
+                                            {% elseif result.qcm.video %}
+                                                {{ result.qcm.video.title }} <span class="badge bg-danger ms-2" style="font-size: 0.6em;">VIDEO</span>
+                                            {% else %}
+                                                <span class="text-muted fst-italic">Contenu supprimé</span>
+                                            {% endif %}
+                                        </td>
                                         <td>{{ result.createdAt|date('d/m/y') }}</td>
                                         <td><span class="fw-bold">{{ result.score }}</span> / {{ result.maxScore }}</td>
                                         <td>

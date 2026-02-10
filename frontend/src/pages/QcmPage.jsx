@@ -33,6 +33,7 @@ const QcmPage = () => {
                     setSubmitted(true);
                 } catch (error) {
                     console.error("Error saving result:", error);
+                    alert("Erreur lors de la sauvegarde du résultat. Veuillez vérifier votre connexion. Détails: " + (error.response?.data?.detail || error.message));
                 }
             };
             if (qcm) saveResult(); // Ensure QCM exists before saving

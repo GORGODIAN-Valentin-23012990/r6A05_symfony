@@ -9,7 +9,7 @@ Le projet est divisé en deux parties principales :
 - **Étudiants (`/student`)** : Partie étudiants construite avec **React 19**, **Vite** et **Tailwind CSS**.
 
 ## 🚀 Prérequis
-
+f
 Assurez-vous d'avoir les outils suivants installés sur votre machine :
 - **PHP** 8.2 ou supérieur
 - **Composer** (Gestionnaire de dépendances PHP)
@@ -128,3 +128,18 @@ Une fois le backend lancé, vous pouvez accéder à la documentation interactive
 - **Lint Backend** : `php bin/console lint:yaml config`
 - **Lint Frontend** : `cd frontend && npm run lint`
 - **Tests** : `php bin/console test` (si configuré)
+
+## 🔑 Fixtures (Comptes de test)
+
+Pour peupler la base de données avec des utilisateurs de test, lancez la commande suivante :
+
+```bash
+php bin/console doctrine:fixtures:load
+```
+
+Voici les comptes créés par défaut :
+
+| Rôle | Email | Mot de passe |
+| :--- | :--- | :--- |
+| **Professeur** (Admin) | `prof@example.com` | `password` |
+| **Étudiant** | `eleve@example.com` | `password` |
